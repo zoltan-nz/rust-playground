@@ -23,3 +23,13 @@ cargo install cargo-workspaces
 cargo new app
 cargo new --lib my-lib
 ```
+
+https://github.com/dtolnay/cargo-expand
+```
+cargo install cargo-expand
+```
+
+Linting
+```
+cargo clippy
+```
