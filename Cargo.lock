@@ -3,5 +3,12 @@
 version = 3
 
 [[package]]
-name = "rust-playground"
+name = "add-one"
 version = "0.1.0"
+
+[[package]]
+name = "adder"
+version = "0.1.0"
+dependencies = [
+ "add-one",
+]
