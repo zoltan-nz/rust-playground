@@ -17,7 +17,11 @@ impl Config {
         let file_path = args[2].clone();
         let ignore_case = std::env::var("CASE_INSENSITIVE").is_err();
 
-        Ok(Config { query, file_path, ignore_case })
+        Ok(Config {
+            query,
+            file_path,
+            ignore_case,
+        })
     }
 }
 
@@ -29,7 +33,6 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     } else {
         search(&config.query, &contents)
     };
-
 
     for line in results {
         println!("{line}");
