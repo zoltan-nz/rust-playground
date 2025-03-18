@@ -1,8 +1,7 @@
 # Q & A Application using Axum Crate in Rust
 
-Setup default axum server.
-
-Add CORS support.
+-[x] Setup default axum server.
+-[x] Add CORS support.
 
 Required models:
 - Question
