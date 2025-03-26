@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use crate::models::question::QuestionId;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize, Clone, Eq, Hash, PartialEq)]
 pub struct AnswerId(String);

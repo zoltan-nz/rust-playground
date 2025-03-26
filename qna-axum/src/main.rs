@@ -1,11 +1,11 @@
+mod handlers;
 mod middlewares;
 mod models;
 mod services;
 
-use crate::models::question::Question;
-use axum::extract::State;
-use axum::routing::get;
-use axum::{Json, Router};
+use axum::routing::{get, post};
+use axum::Router;
+use handlers::questions;
 
 #[tokio::main]
 async fn main() {
@@ -15,7 +15,8 @@ async fn main() {
 
     let app = Router::new()
         .route("/", get(root))
-        .route("/questions", get(get_questions))
+        .route("/questions", get(questions::index))
+        .route("/questions", post(questions::create))
         .layer(middlewares::cors::cors())
         .with_state(store.clone());
 
@@ -26,13 +27,4 @@ async fn main() {
 
 async fn root() -> &'static str {
     "Server is running..."
-}
-
-async fn get_questions(State(store): State<services::store::Store>) -> Json<Vec<Question>> {
-    let questions = store.questions.read().await
-        .values()
-        .cloned()
-        .collect();
-
-    Json(questions)
 }

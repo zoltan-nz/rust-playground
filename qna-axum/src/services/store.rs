@@ -1,8 +1,11 @@
-use crate::models::{answer::Answer, question::{Question, QuestionId}};
+use crate::models::answer::AnswerId;
+use crate::models::{
+    answer::Answer,
+    question::{Question, QuestionId},
+};
 use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::RwLock;
-use crate::models::answer::AnswerId;
 
 #[derive(Debug, Clone)]
 pub struct Store {
