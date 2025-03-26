@@ -17,6 +17,7 @@ async fn main() {
         .route("/", get(root))
         .route("/questions", get(questions::index))
         .route("/questions", post(questions::create))
+        .route("/questions/{question_id}", get(questions::show))
         .layer(middlewares::cors::cors())
         .with_state(store.clone());
 
