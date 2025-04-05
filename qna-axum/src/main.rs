@@ -3,7 +3,7 @@ mod middlewares;
 mod models;
 mod services;
 
-use axum::routing::{get, post};
+use axum::routing::{delete, get, post, put};
 use axum::Router;
 use handlers::questions;
 
@@ -17,7 +17,9 @@ async fn main() {
         .route("/", get(root))
         .route("/questions", get(questions::index))
         .route("/questions", post(questions::create))
-        .route("/questions/{question_id}", get(questions::show))
+        .route("/questions/{id}", get(questions::show))
+        .route("/questions/{id}", put(questions::update))
+        .route("/questions/{id}", delete(questions::delete))
         .layer(middlewares::cors::cors())
         .with_state(store.clone());
 
