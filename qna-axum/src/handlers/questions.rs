@@ -1,17 +1,29 @@
+use crate::middlewares::pagination::Pagination;
+use crate::models::errors::Error;
 use crate::models::question::Question;
 use crate::models::question::QuestionId;
 use crate::services;
-use crate::models::errors::Error;
-use axum::extract::{Path, State};
+use axum::extract::{Path, Query, State};
 use axum::http::StatusCode;
 use axum::response::IntoResponse;
 use axum::Json;
-use tokio::io::AsyncReadExt;
 
-pub async fn index(State(store): State<services::store::Store>) -> impl IntoResponse {
+pub async fn index(
+    State(store): State<services::store::Store>,
+    Query(pagination): Query<Pagination>,
+) -> impl IntoResponse {
+    let (page, per_page) = pagination.get_values();
     let questions: Vec<Question> = store.questions.read().await.values().cloned().collect();
 
-    Json(questions).into_response()
+    let start = (page - 1) * per_page;
+    let end = start + per_page;
+    let paginated_questions = if start < questions.len() {
+        questions[start..end.min(questions.len())].to_vec()
+    } else {
+        Vec::new()
+    };
+
+    Json(paginated_questions).into_response()
 }
 
 pub async fn create(
