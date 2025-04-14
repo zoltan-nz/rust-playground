@@ -15,8 +15,12 @@ use tokio::sync::RwLock;
 -[x] Added a route and handler to get all questions. (GET /questions)
 -[x] Implement POST /questions to create a new question.
 -[x] Implement GET /questions/:id to get a question by id.
--[ ] Implement PUT /questions/:id to update a question by id.
--[ ] Implement DELETE /questions/:id to delete a question by id.
--[ ] Add pagination options to GET /questions.
--[ ] Add error handling. 
+-[x] Implement PUT /questions/:id to update a question by id.
+-[x] Implement DELETE /questions/:id to delete a question by id.
+-[x] Add pagination options to GET /questions.
+-[x] Add error handling.
+-[ ] Add tracing.
 
+### Useful links
+
+- [Tracing with Axum](https://ianbull.com/posts/axum-rust-tracing)
