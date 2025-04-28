@@ -19,8 +19,14 @@ use tokio::sync::RwLock;
 -[x] Implement DELETE /questions/:id to delete a question by id.
 -[x] Add pagination options to GET /questions.
 -[x] Add error handling.
--[ ] Add tracing.
+-[x] Add tracing.
+-[x] Add SeaORM.
+-[x] Add SQLite database.
+-[x] Create migration for the database using SeaORM.
+-[x] Create entities for Question and Answer.
+-[x] Implement CRUD operations using SeaORM.
 
 ### Useful links
 
 - [Tracing with Axum](https://ianbull.com/posts/axum-rust-tracing)
+- [SeeORM](https://www.sea-ql.org/SeaORM/)

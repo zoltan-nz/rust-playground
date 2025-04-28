@@ -1,4 +1,4 @@
 [workspace]
 resolver = "2"
 
-members = ["adder", "add-one", "guessing-game", "minigrep", "web-server", "qna-axum"]
+members = ["adder", "add-one", "guessing-game", "minigrep", "web-server", "qna-axum", "qna-axum/migration"]

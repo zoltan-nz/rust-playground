@@ -1,1 +1,35 @@
 GET localhost:3000/questions
+
+
+###
+GET localhost:3000/questions/1
+
+
+###
+POST localhost:3000/questions
+Content-Type: application/json
+
+{
+  "title": "Test Question",
+  "content": "This is a test question.",
+  "tags": [
+    "test",
+    "question"
+  ]
+}
+
+###
+PUT localhost:3000/questions/1
+Content-Type: application/json
+
+{
+  "title": "Test Question",
+  "content": "This is a test question.",
+  "tags": [
+    "test 2",
+    "question 3"
+  ]
+}
+
+###
+DELETE localhost:3000/questions/2

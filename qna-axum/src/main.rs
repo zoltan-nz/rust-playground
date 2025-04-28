@@ -1,12 +1,12 @@
+mod entities;
 mod handlers;
 mod middlewares;
 mod models;
-mod services;
 
 use handlers::questions;
 use log::info;
-use std::fmt::Debug;
 use std::net::SocketAddr;
+use std::sync::Arc;
 use tracing_subscriber::EnvFilter;
 
 use tower::ServiceBuilder;
@@ -25,6 +25,7 @@ use axum::{
     routing::{delete, get, post, put},
     Router,
 };
+use dotenvy::dotenv;
 use std::time::Duration;
 use tokio::net::TcpListener;
 use tower_http::trace::{DefaultOnBodyChunk, OnBodyChunk};
@@ -32,11 +33,29 @@ use tower_http::{classify::ServerErrorsFailureClass, trace::TraceLayer};
 use tracing::{info_span, Span};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
+#[derive(Clone)]
+pub struct AppState {
+    db: Arc<sea_orm::DatabaseConnection>,
+}
+
 #[tokio::main]
 async fn main() {
+    dotenvy::from_path("./qna-axum/.env").expect("Failed to load .env file");
     init_logging();
 
-    let store = services::store::Store::new();
+    let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    let db = match sea_orm::Database::connect(&database_url).await {
+        Ok(db_conn) => {
+            info!("Successfully connected to the database");
+            db_conn
+        }
+        Err(err) => {
+            eprintln!("Failed to connect to the database: {:?}", err);
+            std::process::exit(1);
+        }
+    };
+
+    let app_state = AppState { db: Arc::new(db) };
 
     let app = Router::new()
         .route("/", get(root))
@@ -47,7 +66,7 @@ async fn main() {
         .route("/questions/{id}", delete(questions::delete))
         .layer(middlewares::cors::cors())
         .layer(TraceLayer::new_for_http())
-        .with_state(store.clone());
+        .with_state(app_state);
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
     info!("Starting server on {}", addr);
