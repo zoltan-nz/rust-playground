@@ -25,8 +25,13 @@ use tokio::sync::RwLock;
 -[x] Create migration for the database using SeaORM.
 -[x] Create entities for Question and Answer.
 -[x] Implement CRUD operations using SeaORM.
+-[] Implement authentication and authorization.
 
 ### Useful links
 
 - [Tracing with Axum](https://ianbull.com/posts/axum-rust-tracing)
-- [SeeORM](https://www.sea-ql.org/SeaORM/)
+- [SeaORM](https://www.sea-ql.org/SeaORM/)
+
+### Authentication and Authorization
+
+- axum-login: 
