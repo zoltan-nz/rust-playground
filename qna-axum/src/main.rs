@@ -3,34 +3,16 @@ mod handlers;
 mod middlewares;
 mod models;
 
-use handlers::questions;
+use handlers::{auth, questions};
 use log::info;
 use std::net::SocketAddr;
 use std::sync::Arc;
 use tracing_subscriber::EnvFilter;
-
-use tower::ServiceBuilder;
-use tower_http::{
-    trace::{DefaultMakeSpan, DefaultOnRequest, DefaultOnResponse},
-    LatencyUnit,
-};
-use tracing::Level;
-
-use axum::body::Body;
 use axum::{
-    body::Bytes,
-    extract::MatchedPath,
-    http::{HeaderMap, Request},
-    response::{Html, Response},
     routing::{delete, get, post, put},
     Router,
 };
-use dotenvy::dotenv;
-use std::time::Duration;
-use tokio::net::TcpListener;
-use tower_http::trace::{DefaultOnBodyChunk, OnBodyChunk};
-use tower_http::{classify::ServerErrorsFailureClass, trace::TraceLayer};
-use tracing::{info_span, Span};
+use tower_http::trace::TraceLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 #[derive(Clone)]
@@ -59,11 +41,17 @@ async fn main() {
 
     let app = Router::new()
         .route("/", get(root))
+        // auth routes
+        .route("/login", get(auth::login_page))
+        .route("/login", post(auth::login))
+        // public question routes
         .route("/questions", get(questions::index))
-        .route("/questions", post(questions::create))
         .route("/questions/{id}", get(questions::show))
+        // protected routes (write ops) using middleware
+        .route("/questions", post(questions::create))
         .route("/questions/{id}", put(questions::update))
         .route("/questions/{id}", delete(questions::delete))
+        .route_layer(axum::middleware::from_fn(auth::require_auth))
         .layer(middlewares::cors::cors())
         .layer(TraceLayer::new_for_http())
         .with_state(app_state);

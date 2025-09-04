@@ -26,6 +26,7 @@ use tokio::sync::RwLock;
 -[x] Create entities for Question and Answer.
 -[x] Implement CRUD operations using SeaORM.
 -[] Implement authentication and authorization.
+-[] Implement WebAssembly compatible user interfaces (using leptos)
 
 ### Useful links
 
